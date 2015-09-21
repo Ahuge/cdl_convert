@@ -193,6 +193,106 @@ def parse_ale(input_file):  # pylint: disable=R0914
 # ==============================================================================
 
 
+def parse_nk(input_file):
+    """Parses a .nk file for OCIOCDL Transform information
+
+    **Args:**
+        input_file : (str)
+            The filepath to the nk.
+
+    **Returns:**
+        (:class:`ColorCorrection`)
+            The :class:`ColorCorrection` described within.
+
+    **Raises:**
+        ValueError:
+            If the file contains no OCIOCDLTransform nodes in it
+        TypeError:
+            If the input_file is not a filepath of type str, unicode.
+
+    A nk file is just a nuke OCIOCDL Transform node with cdl data stored inside. It is an "unofficial" format but quite
+    often used in vfx.
+
+    A sample OCIOCDL nk file has text like:
+    ::
+        set cut_paste_input [stack 0]
+        version 9.0 v6
+        push $cut_paste_input
+        OCIOCDLTransform {
+         slope {1.100000024 0.05332994089 0.5167440772}
+         offset {0.005376434419 0.05999999866 0}
+         power {0.1321808547 0.2599999905 0.1195999905}
+         saturation 0.25
+         working_space linear
+         name OCIOCDLTransform1
+         selected true
+         xpos -40
+         ypos -226
+        }
+
+
+    If the values for slope, offset, power or saturation aren't found, the values 1, 0, 1, 1 can be assumed respectively
+
+    """
+    if not isinstance(input_file, (str, unicode)):
+        raise TypeError("The passed file is not of type str or unicode. It is of type {pass_type}. Please"
+                        "pass a str or unicode path to the nk file.".format(pass_type=type(input_file)))
+
+    # ================================== Defaults and Constants ================================== #
+    expr = re.compile(r"^\s?(slope|offset|power|saturation)\s\{?((?:[-+]?(?:\d+(?:\.\d*)?|\.\d+)\s?){1,3})\}?$")
+    node_default = {  # Default values will be set and overwritten if found in the node.
+        "slope": 1,
+        "offset": 0,
+        "power": 1,
+        "saturation": 1,
+        'cc_id': os.path.splitext(
+            os.path.basename(input_file))[0]  # The filename without extension will become the id.
+    }
+
+    # ================================== Main Process ================================== #
+    ocio_nodes = []
+    for node in _yield_nodes(input_file):
+        if node[0] == "OCIOCDLTransform {":  # If the node has type OCIOCDLTransform, capture it.
+            ocio_nodes.append(node)
+
+    if not ocio_nodes:
+        raise ValueError("The passed file does not appear to have Nuke nodes of type OCIOCDLTransform. Please make sure"
+                         " that you are using the OCIOCDLTransform nodes when exporting the CDL data.")
+
+    cdls = []
+    for node in ocio_nodes:
+        node_values = dict(node_default)  # Forcing the value to be copying by value, not reference.
+        for line in node:
+            match = re.match(expr, line)  # Capture the slope/offset/power/saturation lines and their values.
+            name_match = re.match(r"^\sname\s(\w+)$", line)  # Capture the name of the node to append to the cc_id.
+            if match:
+                knob, value = match.groups()
+                if knob in node_values:
+                    node_values[knob] = value.split(" ")
+            elif name_match:
+                name = name_match.group(1)
+                name = "." + name
+                node_values['cc_id'] += name  # The Node name will be added on to the id with a "." deliminator.
+
+        # ================================== ColorCorrection Construction ==================================
+        cdl = correction.ColorCorrection(node_values['cc_id'], input_file)
+        cdl.slope = _format_single_list(node_values['slope'])
+        cdl.offset = _format_single_list(node_values['offset'])
+        cdl.power = _format_single_list(node_values['power'])
+        cdl.sat = _format_single_list(node_values['saturation'])
+
+        cdls.append(cdl)
+
+    ccc = collection.ColorCollection()
+    ccc.set_to_nk()
+    ccc.file_in = input_file
+    ccc.append_children(cdls)
+    return ccc
+
+
+# ==============================================================================
+
+
 def parse_cc(input_file):  # pylint: disable=R0912
     """Parses a .cc file for ASC CDL information
 
@@ -232,7 +332,7 @@ def parse_cc(input_file):  # pylint: disable=R0912
     colorspace and equipment.
 
     """
-    if type(input_file) is str:
+    if isinstance(input_file, str):
         root = _remove_xmlns(input_file)
         file_in = input_file
     else:
@@ -664,6 +764,41 @@ def _remove_xmlns(input_file):
 
     return ElementTree.fromstring(xml_string)
 
+
+def _yield_nodes(input_file):
+    """
+    :param input_file: (str|unicode) Path to the nk file to be parsed.
+    :yields:  (list) Lines of the input_file in "node sized" chunks
+    """
+
+    open_node = re.compile(r"^\w+\s\{$")
+    close_node = re.compile(r"^\}$")
+
+    node = []
+    node_status = False
+
+    with open(input_file) as handle:
+        for line in iter(lambda: handle.readline(), ""):
+            line = line.replace("\n", "")
+            if not node_status and re.match(open_node, line):  # If not in a node and a new node opener is found.
+                node_status = True
+
+            if node_status:
+                node.append(line)
+                if re.match(close_node, line):  # Ending of node.
+                    node_status = False
+                    y_node = node
+                    node = []  # Reset the node list
+                    yield y_node  # Yield the node list.
+
+
+def _format_single_list(value):
+    if isinstance(value, (list, tuple)):
+        if len(value) == 1:
+            return value[0]
+    return value
+
+
 # ==============================================================================
 # GLOBALS
 # ==============================================================================
@@ -671,6 +806,7 @@ def _remove_xmlns(input_file):
 INPUT_FORMATS = {
     'ale': parse_ale,
     'ccc': parse_ccc,
+    'nk': parse_nk,
     'cc': parse_cc,
     'cdl': parse_cdl,
     'flex': parse_flex,
