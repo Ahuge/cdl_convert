@@ -342,7 +342,7 @@ class ColorCollection(AscDescBase, AscColorSpaceBase, AscXMLBase):  # pylint: di
         """Sets a list to provided values but first checks membership"""
         if values is None:
             return []
-        elif type(values) in [list, tuple, set]:
+        elif isinstance(values, (list, tuple, set)):
             for color in values:
                 # We need to make sure each member is of the correct class.
                 if color.__class__ != color_class:
@@ -661,3 +661,9 @@ class ColorCollection(AscDescBase, AscColorSpaceBase, AscXMLBase):  # pylint: di
     def set_to_cdl(self):
         """Switches the type of the ColorCollection to export .cdl style xml"""
         self._type = 'cdl'
+
+    # =========================================================================
+
+    def set_to_nk(self):
+        """Switches the type of the ColorCollection to export .nk style file"""
+        self._type = 'nk'

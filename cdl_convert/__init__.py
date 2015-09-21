@@ -81,7 +81,7 @@ from .decision import ColorCorrectionRef, ColorDecision, MediaRef
 from .parse import (
     parse_ale, parse_cc, parse_ccc,
     parse_cdl, parse_file, parse_flex,
-    parse_rnh_cdl
+    parse_rnh_cdl, parse_nk
 )
 from .utils import sanity_check, to_decimal
 from .write import write_cc, write_ccc, write_cdl, write_rnh_cdl

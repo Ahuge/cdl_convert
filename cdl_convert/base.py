@@ -267,7 +267,7 @@ class AscDescBase(object):  # pylint: disable=R0903
         """Adds an entry to the descriptions"""
         if value is None:
             self._desc = []
-        elif type(value) in [list, tuple]:
+        elif isinstance(value, (list, tuple)):
             self._desc = list(value)
         else:
             self._desc.append(value)
