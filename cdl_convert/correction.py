@@ -517,7 +517,7 @@ class SatNode(ColorNodeBase):
     def sat(self, value):
         """Runs checks and converts saturation value before setting"""
         # If given as a string, the string must be convertible to a Decimal
-        if type(value) in [Decimal, float, int, str]:
+        if isinstance(value, (Decimal, float, int, str)):
             try:
                 value = self._check_single_value(value, 'saturation')
             except (TypeError, ValueError):
@@ -781,14 +781,14 @@ class SopNode(ColorNodeBase):
                 raised if value given is negative.
 
         """
-        if type(value) in [Decimal, float, int, str]:
+        if isinstance(value, (Decimal, float, int, str)):
             try:
                 value = self._check_single_value(value, name, negative_allow)
             except (TypeError, ValueError):
                 raise
             else:
                 set_value = [value] * 3
-        elif type(value) in [list, tuple]:
+        elif isinstance(value, (list, tuple)):
             try:
                 value = self._check_rgb_values(value, name, negative_allow)
             except (TypeError, ValueError):

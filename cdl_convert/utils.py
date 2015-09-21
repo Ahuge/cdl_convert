@@ -163,16 +163,16 @@ def to_decimal(value, name='Value'):
             If given a value that isn't an allowed type.
 
     """
-    if type(value) is float:
+    if isinstance(value, float):
         # Rather than mess about with float -> Decimal conversion,
         # it suits our accuracy needs just fine to go straight to string.
         value = str(value)
-    elif type(value) is int:
+    elif isinstance(value, int):
         # If we're giving an int, we need to add a '.0' behind it.
         value = str(value) + '.0'
-    elif type(value) is Decimal:
+    elif isinstance(value, Decimal):
         return value
-    elif type(value) is str:
+    elif isinstance(value, str):
         if '.' not in value:
             value += '.0'
 

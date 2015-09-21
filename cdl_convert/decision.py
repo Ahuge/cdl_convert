@@ -456,7 +456,7 @@ class ColorDecision(AscDescBase, AscColorSpaceBase, AscXMLBase):  # pylint: disa
     @property
     def is_ref(self):
         """True if our cc is a reference cc"""
-        return type(self.cc) is ColorCorrectionRef
+        return isinstance(self.cc, ColorCorrectionRef)
 
     @property
     def media_ref(self):
@@ -773,7 +773,7 @@ class MediaRef(AscXMLBase):
     @directory.setter
     def directory(self, value):
         """Checks directory for type and resets cached properties"""
-        if type(value) is str:
+        if isinstance(value, str):
             old_ref = self.ref
             self._dir = value
             self._change_membership(old_ref=old_ref)
@@ -798,7 +798,7 @@ class MediaRef(AscXMLBase):
     @filename.setter
     def filename(self, value):
         """Checks filename for type and resets cached properties"""
-        if type(value) is str:
+        if isinstance(value, str):
             old_ref = self.ref
             self._filename = value
             self._change_membership(old_ref=old_ref)
@@ -840,7 +840,7 @@ class MediaRef(AscXMLBase):
     @protocol.setter
     def protocol(self, value):
         """Checks protocol for type and resets cached properties"""
-        if type(value) is str:
+        if isinstance(value, str):
             # If :// was appended we'll remove it.
             if value.endswith('://'):
                 value = value[:-3]
@@ -869,7 +869,7 @@ class MediaRef(AscXMLBase):
     @ref.setter
     def ref(self, uri):
         """Sets the reference uri and resets all cached properties"""
-        if type(uri) is str:
+        if isinstance(uri, str):
             old_ref = self.ref
             self._protocol, self._dir, self._filename = self._split_uri(uri)
             self._change_membership(old_ref=old_ref)
