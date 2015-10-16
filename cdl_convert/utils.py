@@ -186,6 +186,9 @@ def to_decimal(value, name='Value'):
                     value=value
                 )
             )
+    elif isinstance(value, long):
+        # If we're giving an long, we need to add a '.0' behind it.
+        value = str(value) + '.0'
     else:
         raise ValueError(
             '{name} cannot be set directly with objects of type: "{type}". '
