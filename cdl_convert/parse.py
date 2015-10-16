@@ -767,6 +767,8 @@ def _remove_xmlns(input_file):
 
 def _yield_nodes(input_file):
     """
+    _yield_nodes will yield the nodes from a nuke file. It probably wont work with roto nodes and tracker nodes, but all
+    simple nodes should work.
     :param input_file: (str|unicode) Path to the nk file to be parsed.
     :yields:  (list) Lines of the input_file in "node sized" chunks
     """
@@ -793,6 +795,12 @@ def _yield_nodes(input_file):
 
 
 def _format_single_list(value):
+    """
+    _format_single_list is designed to take a parameter and if it is a list or a tuple with one item, return that item
+    without being a list/tuple
+    :param value: Any value.
+    :return: Any value, if it was a list/tuple of one item, it will now be whatever type that item was.
+    """
     if isinstance(value, (list, tuple)):
         if len(value) == 1:
             return value[0]
