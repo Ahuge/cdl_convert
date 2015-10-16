@@ -50,7 +50,7 @@ CDL_FULL = """<?xml version="1.0" encoding="UTF-8"?>
         <Description>CD description 1</Description>
         <InputDescription>CD Input Desc Text</InputDescription>
         <Description>CD description 2</Description>
-        <MediaRef ref="/best/path/ever.dpx"/>
+        <MediaRef ref="{path1}"/>
         <Description>CD description 3</Description>
         <ColorCorrection id="014_xf_seqGrade_v01">
             <Description>CC description 1</Description>
@@ -89,7 +89,7 @@ CDL_FULL = """<?xml version="1.0" encoding="UTF-8"?>
         </ColorCorrection>
     </ColorDecision>
     <ColorDecision>
-        <MediaRef ref="relative/path/13.jpg"/>
+        <MediaRef ref="{path2}"/>
         <ColorCorrectionRef ref="f51.200"/>
     </ColorDecision>
     <ColorDecision>
@@ -155,7 +155,7 @@ CDL_FULL = """<?xml version="1.0" encoding="UTF-8"?>
     </ColorDecision>
     <Description>CDL description 5</Description>
 </ColorDecisionList>
-"""
+""".format(path1=os.path.abspath("/best/path/ever.dpx"), path2=os.path.abspath("relative/path/13.jpg"))
 
 CDL_ODD = r"""<?xml version="1.0" encoding="UTF-8"?>
 <ColorDecisionList>
@@ -166,7 +166,7 @@ CDL_ODD = r"""<?xml version="1.0" encoding="UTF-8"?>
     <Description></Description>
     <Description></Description>
     <ColorDecision>
-        <MediaRef ref="C:\\Windows\File\Path"/>
+        <MediaRef ref="{path1}"/>
         <ColorCorrection id="014_xf_seqGrade_v01">
             <SOPNode>
                 <Description>Sop description 1</Description>
@@ -186,7 +186,7 @@ CDL_ODD = r"""<?xml version="1.0" encoding="UTF-8"?>
                 <Power>1.8 0.97 0.961</Power>
             </SopNode>
         </ColorCorrection>
-        <MediaRef ref="relative\windows\path"/>
+        <MediaRef ref="{path2}"/>
     </ColorDecision>
     <Description>Raised1 saturation a little!?! ag... \/Offset</Description>
     <Description>Raised2 saturation a little!?! ag... \/Offset</Description>
@@ -198,19 +198,19 @@ CDL_ODD = r"""<?xml version="1.0" encoding="UTF-8"?>
         <Description></Description>
         <Description></Description>
         <ColorCorrectionRef ref="014_xf_seqGrade_v01"/>
-        <MediaRef ref="./sameDirectory/loser.####.fbx"/>
+        <MediaRef ref="{path3}"/>
     </ColorDecision>
     <ColorDecision>
-        <MediaRef ref="../lateralDirectory/file.lives.here.0120.dpx"/>
+        <MediaRef ref="{path4}"/>
         <ColorCorrectionRef ref="missingRef"/>
     </ColorDecision>
     <ViewingDescription></ViewingDescription>
     <ColorDecision>
-        <MediaRef ref="http://www.google.com/logo.jpg"/>
+        <MediaRef ref="{path5}"/>
         <ColorCorrectionRef ref="alsoMissingRef"/>
     </ColorDecision>
     <ColorDecision>
-        <MediaRef ref="serv://proto/uri:area:full?query=result#fragment"/>
+        <MediaRef ref="{path6}"/>
         <ColorCorrection id="burp_200.x15">
             <SatNode>
                 <Description>I am a lovely sat node</Description>
@@ -224,7 +224,11 @@ CDL_ODD = r"""<?xml version="1.0" encoding="UTF-8"?>
         <ColorCorrectionRef ref="f51.200"/>
     </ColorDecision>
 </ColorDecisionList>
-"""
+""".format(path1=os.path.abspath("C:\\Windows\File\Path"), path2=os.path.abspath("relative\windows\path"),
+           path3=os.path.abspath("./sameDirectory/loser.####.fbx"),
+           path4=os.path.abspath("../lateralDirectory/file.lives.here.0120.dpx"),
+           path5=os.path.abspath("http://www.google.com/logo.jpg"),
+           path6=os.path.abspath("serv://proto/uri:area:full?query=result#fragment"))
 
 # write_cdl ===================================================================
 
@@ -243,7 +247,7 @@ CDL_FULL_WRITE = """<?xml version="1.0" encoding="UTF-8"?>
         <Description>CD description 1</Description>
         <Description>CD description 2</Description>
         <Description>CD description 3</Description>
-        <MediaRef ref="/best/path/ever.dpx"/>
+        <MediaRef ref="{path1}"/>
         <ColorCorrection id="014_xf_seqGrade_v01">
             <InputDescription>Input Desc Text</InputDescription>
             <ViewingDescription>Viewing Desc Text</ViewingDescription>
@@ -280,7 +284,7 @@ CDL_FULL_WRITE = """<?xml version="1.0" encoding="UTF-8"?>
         </ColorCorrection>
     </ColorDecision>
     <ColorDecision>
-        <MediaRef ref="relative/path/13.jpg"/>
+        <MediaRef ref="{path2}"/>
         <ColorCorrectionRef ref="f51.200"/>
     </ColorDecision>
     <ColorDecision>
@@ -332,7 +336,7 @@ CDL_FULL_WRITE = """<?xml version="1.0" encoding="UTF-8"?>
         <ColorCorrectionRef ref="f54.112"/>
     </ColorDecision>
 </ColorDecisionList>
-"""
+""".format(path1=os.path.abspath("/best/path/ever.dpx"), path2=os.path.abspath("relative/path/13.jpg"))
 
 CDL_FULL_WRITE_CCC = """<?xml version="1.0" encoding="UTF-8"?>
 <ColorCorrectionCollection xmlns="urn:ASC:CDL:v1.01">
@@ -439,7 +443,7 @@ CDL_ODD_WRITE = r"""<?xml version="1.0" encoding="UTF-8"?>
     <Description>Raised1 saturation a little!?! ag... \/Offset</Description>
     <Description>Raised2 saturation a little!?! ag... \/Offset</Description>
     <ColorDecision>
-        <MediaRef ref="C:\\Windows\File\Path"/>
+        <MediaRef ref="{path1}"/>
         <ColorCorrection id="014_xf_seqGrade_v01">
             <SOPNode>
                 <Description>Sop description 1</Description>
@@ -452,7 +456,7 @@ CDL_ODD_WRITE = r"""<?xml version="1.0" encoding="UTF-8"?>
         </ColorCorrection>
     </ColorDecision>
     <ColorDecision>
-        <MediaRef ref="relative\windows\path"/>
+        <MediaRef ref="{path2}"/>
         <ColorCorrection id="f51.200">
             <SOPNode>
                 <Slope>0.2331 0.678669 1.0758</Slope>
@@ -463,19 +467,19 @@ CDL_ODD_WRITE = r"""<?xml version="1.0" encoding="UTF-8"?>
     </ColorDecision>
     <ColorDecision>
         <Description>CD description 1</Description>
-        <MediaRef ref="./sameDirectory/loser.####.fbx"/>
+        <MediaRef ref="{path3}"/>
         <ColorCorrectionRef ref="014_xf_seqGrade_v01"/>
     </ColorDecision>
     <ColorDecision>
-        <MediaRef ref="../lateralDirectory/file.lives.here.0120.dpx"/>
+        <MediaRef ref="{path4}"/>
         <ColorCorrectionRef ref="missingRef"/>
     </ColorDecision>
     <ColorDecision>
-        <MediaRef ref="http://www.google.com/logo.jpg"/>
+        <MediaRef ref="{path5}"/>
         <ColorCorrectionRef ref="alsoMissingRef"/>
     </ColorDecision>
     <ColorDecision>
-        <MediaRef ref="serv://proto/uri:area:full?query=result#fragment"/>
+        <MediaRef ref="{path6}"/>
         <ColorCorrection id="burp_200.x15">
             <SATNode>
                 <Description>I am a lovely sat node</Description>
@@ -489,7 +493,11 @@ CDL_ODD_WRITE = r"""<?xml version="1.0" encoding="UTF-8"?>
         <ColorCorrectionRef ref="f51.200"/>
     </ColorDecision>
 </ColorDecisionList>
-"""
+""".format(path1=os.path.abspath("C:\\Windows\File\Path"), path2=os.path.abspath("relative\windows\path"),
+           path3=os.path.abspath("./sameDirectory/loser.####.fbx"),
+           path4=os.path.abspath("../lateralDirectory/file.lives.here.0120.dpx"),
+           path5=os.path.abspath("http://www.google.com/logo.jpg"),
+           path6=os.path.abspath("serv://proto/uri:area:full?query=result#fragment"))
 
 CDL_ODD_WRITE_RESOLVED = r"""<?xml version="1.0" encoding="UTF-8"?>
 <ColorDecisionList xmlns="urn:ASC:CDL:v1.01">
@@ -497,7 +505,7 @@ CDL_ODD_WRITE_RESOLVED = r"""<?xml version="1.0" encoding="UTF-8"?>
     <Description>Raised1 saturation a little!?! ag... \/Offset</Description>
     <Description>Raised2 saturation a little!?! ag... \/Offset</Description>
     <ColorDecision>
-        <MediaRef ref="C:\\Windows\File\Path"/>
+        <MediaRef ref="{path1}"/>
         <ColorCorrection id="014_xf_seqGrade_v01">
             <SOPNode>
                 <Description>Sop description 1</Description>
@@ -510,7 +518,7 @@ CDL_ODD_WRITE_RESOLVED = r"""<?xml version="1.0" encoding="UTF-8"?>
         </ColorCorrection>
     </ColorDecision>
     <ColorDecision>
-        <MediaRef ref="relative\windows\path"/>
+        <MediaRef ref="{path2}"/>
         <ColorCorrection id="f51.200">
             <SOPNode>
                 <Slope>0.2331 0.678669 1.0758</Slope>
@@ -521,11 +529,11 @@ CDL_ODD_WRITE_RESOLVED = r"""<?xml version="1.0" encoding="UTF-8"?>
     </ColorDecision>
     <ColorDecision>
         <Description>CD description 1</Description>
-        <MediaRef ref="./sameDirectory/loser.####.fbx"/>
+        <MediaRef ref="{path3}"/>
         <ColorCorrectionRef ref="014_xf_seqGrade_v01"/>
     </ColorDecision>
     <ColorDecision>
-        <MediaRef ref="../lateralDirectory/file.lives.here.0120.dpx"/>
+        <MediaRef ref="{path4}"/>
         <ColorCorrection id="missingRef">
             <SOPNode>
                 <Slope>1.0 2.0 1.0</Slope>
@@ -535,11 +543,11 @@ CDL_ODD_WRITE_RESOLVED = r"""<?xml version="1.0" encoding="UTF-8"?>
         </ColorCorrection>
     </ColorDecision>
     <ColorDecision>
-        <MediaRef ref="http://www.google.com/logo.jpg"/>
+        <MediaRef ref="{path5}"/>
         <ColorCorrectionRef ref="alsoMissingRef"/>
     </ColorDecision>
     <ColorDecision>
-        <MediaRef ref="serv://proto/uri:area:full?query=result#fragment"/>
+        <MediaRef ref="{path6}"/>
         <ColorCorrection id="burp_200.x15">
             <SATNode>
                 <Description>I am a lovely sat node</Description>
@@ -553,7 +561,11 @@ CDL_ODD_WRITE_RESOLVED = r"""<?xml version="1.0" encoding="UTF-8"?>
         <ColorCorrectionRef ref="f51.200"/>
     </ColorDecision>
 </ColorDecisionList>
-"""
+""".format(path1=os.path.abspath("C:\\Windows\File\Path"), path2=os.path.abspath("relative\windows\path"),
+           path3=os.path.abspath("./sameDirectory/loser.####.fbx"),
+           path4=os.path.abspath("../lateralDirectory/file.lives.here.0120.dpx"),
+           path5=os.path.abspath("http://www.google.com/logo.jpg"),
+           path6=os.path.abspath("serv://proto/uri:area:full?query=result#fragment"))
 
 CDL_ODD_WRITE_CCC = r"""<?xml version="1.0" encoding="UTF-8"?>
 <ColorCorrectionCollection xmlns="urn:ASC:CDL:v1.01">
@@ -670,9 +682,9 @@ class TestParseCDLFull(unittest.TestCase):
             'f54.112',
         ]
         self.media_ref_refs = [
-            "/best/path/ever.dpx",
+            os.path.abspath("/best/path/ever.dpx"),
             None,
-            "relative/path/13.jpg",
+            os.path.abspath("relative/path/13.jpg"),
             None,
             None,
             None,
@@ -797,8 +809,8 @@ class TestParseCDLFull(unittest.TestCase):
             i.media_ref.ref if i.media_ref else None for i in self.node.color_decisions
         ]
         self.assertEqual(
-            self.media_ref_refs,
-            ref_list
+            [os.path.abspath(x).replace("\\", "/") if x else x for x in self.media_ref_refs],
+            [os.path.abspath(x).replace("\\", "/") if x else x for x in ref_list]
         )
 
     #==========================================================================
@@ -989,9 +1001,9 @@ class TestParseCDLExceptions(unittest.TestCase):
         emptyCDL = ('<?xml version="1.0" encoding="UTF-8"?>\n'
                     '<ColorDecisionList xmlns="urn:ASC:CDL:v1.01">\n'
                     '\t<ColorDecision>\n'
-                    '\t\t<MediaRef ref="bestref.dpx"/>\n'
+                    '\t\t<MediaRef ref="{path1}"/>\n'
                     '\t</ColorDecision>\n'
-                    '</ColorDecisionList>')
+                    '</ColorDecisionList>'.format(path1=os.path.abspath("bestref.dpx")))
 
         # Build our ccc
         with tempfile.NamedTemporaryFile(mode='wb', delete=False) as f:

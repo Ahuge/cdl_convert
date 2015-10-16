@@ -1121,14 +1121,14 @@ class TestMain(unittest.TestCase):
 
         # Because we have no output selected, a new directory should NOT
         # be created, but path exists should have still been called.
-        mockPathExists.assert_called_with('/fakepath')
+        mockPathExists.assert_called_with(os.path.abspath('/fakepath'))
         self.assertFalse(
             self.mockMakeDirs.called
         )
 
         mockParse.assert_called_once_with(os.path.join(os.getcwd(), 'file.cc'))
         # Determine dest should have set a file_out
-        mockDest.assert_called_once_with('cc', '/fakepath')
+        mockDest.assert_called_once_with('cc', os.path.abspath('/fakepath'))
         # But the write should never have been called.
         self.assertFalse(
             mockWrite.called
@@ -1170,14 +1170,14 @@ class TestMain(unittest.TestCase):
 
         # Because we have no output selected, a new directory should NOT
         # be created, but path exists should have still been called.
-        mockPathExists.assert_called_with('/fakepath')
+        mockPathExists.assert_called_with(os.path.abspath('/fakepath'))
         self.assertFalse(
             self.mockMakeDirs.called
         )
 
         mockParse.assert_called_once_with(os.path.join(os.getcwd(), 'file.cc'))
         # Determine dest should have set a file_out
-        mockDest.assert_called_once_with('/fakepath')
+        mockDest.assert_called_once_with(os.path.abspath('/fakepath'))
         # But the write should never have been called.
         self.assertFalse(
             mockWrite.called

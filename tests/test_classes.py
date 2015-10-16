@@ -1914,7 +1914,7 @@ class TestColorCorrection(unittest.TestCase):
         """Tests that determine destination is calculated correctly"""
         self.cc.determine_dest('cdl', '/bobsBestDirectory')
 
-        dir = os.path.abspath('/bobsBestDirectory')
+        dir = '/bobsBestDirectory'
         filename = os.path.join(dir, 'uniqueId.cdl')
 
         self.assertEqual(
