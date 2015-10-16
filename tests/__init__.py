@@ -9,8 +9,8 @@ from test_ccc import *
 from test_cdl import *
 from test_flex import *
 from test_rnh_cdl import *
+from test_nk import *
 
 
 if __name__ == '__main__':
     unittest.main()
-
